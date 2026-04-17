@@ -23,13 +23,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - run: flutter pub get
-      - run: flutter build apk --release
+      # Added --split-per-abi to give you smaller, optimized APKs
+      - run: flutter build apk --release --split-per-abi
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/*.apk
 
   # --- JOB 2: BUILD LINUX ---
   build-linux:
@@ -42,6 +44,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - run: flutter pub get
       - run: flutter build linux --release
       - name: Package Build
@@ -62,6 +65,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          cache: true
       - run: flutter pub get
       - run: flutter build windows --release
       - name: Archive Windows
