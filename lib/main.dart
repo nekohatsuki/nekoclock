@@ -5,11 +5,10 @@ import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Must add this line.
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600), // Your initial size
+    size: Size(800, 600),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -194,7 +193,6 @@ class ClockPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
-// 2. Add functionName parameter to the widget
 class PulsingCanvas extends StatefulWidget {
   final String functionName;
 
@@ -230,7 +228,6 @@ class _PulsingCanvasState extends State<PulsingCanvas>
       builder: (context, child) {
         return CustomPaint(
           size: Size.infinite,
-          // 3. Pass the functionName into the Painter
           painter: BackgroundPainter(_controller.value, widget.functionName),
         );
       },
@@ -240,7 +237,7 @@ class _PulsingCanvasState extends State<PulsingCanvas>
 
 class BackgroundPainter extends CustomPainter {
   final double progress;
-  final String functionName; // 4. Add the field here
+  final String functionName;
 
   BackgroundPainter(this.progress, this.functionName);
 
@@ -256,7 +253,7 @@ class BackgroundPainter extends CustomPainter {
 
     double scale = 216;
 
-    // 5. Draw different shapes based on the selected option
+    // Draw different shapes based on the selected option
     if (functionName == 'No. 1') {
       double k = (progress - 0.5).abs() * 20;
 
@@ -273,8 +270,6 @@ class BackgroundPainter extends CustomPainter {
         }
       }
     } else if (functionName == 'No. 2') {
-      // I've added a cool animated "Rose Curve" for function No. 2!
-      // 'n' petals morph smoothly based on the animation progress
       double n =
           3 + math.sin(progress * 2 * math.pi) * 5; // varies from -2 to 8
 
