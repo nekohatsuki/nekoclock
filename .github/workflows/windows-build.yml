@@ -25,8 +25,13 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
-          name: windows-release-bundle
-          path: build/windows/x64/runner/Release/
+          files: |
+            build/windows/x64/runner/Release/*
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

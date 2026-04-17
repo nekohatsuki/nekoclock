@@ -33,8 +33,17 @@ jobs:
       - name: Build Linux
         run: flutter build linux --release
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Package Build
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czvf ../../../../linux-release.tar.gz .
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
-          name: linux-app
-          path: build/linux/x64/release/bundle/
+          files: linux-release.tar.gz
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
