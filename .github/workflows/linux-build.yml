@@ -1,10 +1,9 @@
-name: Build Flutter Linux
+name: Linux Build
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
