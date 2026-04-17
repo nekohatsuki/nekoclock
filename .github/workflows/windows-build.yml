@@ -1,38 +1,31 @@
 name: Build Windows Release
 
-# Trigger the build when you push to the 'main' branch
 on:
   push:
     branches: [ main ]
 
 jobs:
   build:
-    # This is the magic part: it runs on a Windows machine in the cloud!
     runs-on: windows-latest
 
     steps:
-      # 1. Check out your code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up the Flutter environment
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      # 3. Get dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # 4. Compile the Windows app
       - name: Build Windows
         run: flutter build windows --release
 
-      # 5. Upload the result so you can download it
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-release-bundle
-          path: build/windows/runner/Release/
+          path: build/windows/x64/runner/Release/
