@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
 
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600),
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.normal,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
+  // ONLY initialize window_manager if running on Desktop
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(800, 600),
+      center: true,
+      title: "NekoClock",
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
 
   runApp(const MyApp());
 }

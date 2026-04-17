@@ -44,15 +44,15 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
       - run: flutter build linux --release
-      - name: Package Linux
+      - name: Package Build
         run: |
-          cd build/linux/x64/release/bundle
-          tar -czvf ../../../../linux-release.tar.gz .
+          # Use $GITHUB_WORKSPACE to ensure it saves to the root folder
+          tar -czvf ${{ github.workspace }}/linux-release.tar.gz -C build/linux/x64/release/bundle .
+
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v4
+        uses: softprops/action-gh-release@v2
         with:
-          name: linux-dist
-          path: linux-release.tar.gz
+          files: linux-release.tar.gz
 
   # --- JOB 3: BUILD WINDOWS ---
   build-windows:
