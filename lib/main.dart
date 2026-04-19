@@ -17,6 +17,7 @@ void main() async {
       center: true,
       title: "NekoClock",
     );
+
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'NekoClock',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -61,7 +62,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String selectedValue = 'No. 1';
+  String selectedValue = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +73,23 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Stack(
         children: [
-          // 1. Pass the selectedValue down to the PulsingCanvas
+          // Pass the selectedValue down to the PulsingCanvas
           Positioned.fill(child: PulsingCanvas(functionName: selectedValue)),
+          Positioned(
+            left: 20.0,
+            top: 20.0,
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 18),
+                children: <TextSpan>[
+                  TextSpan(
+                    text:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  ),
+                ],
+              ),
+            ),
+          ),
 
           const Center(
             child: Column(
@@ -89,8 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
               initialSelection: 'No. 1',
               label: const Text('Change Background'),
               dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'No. 1', label: 'No. 1'),
-                DropdownMenuEntry(value: 'No. 2', label: 'No. 2'),
+                DropdownMenuEntry(value: '1', label: 'No. 1'),
+                DropdownMenuEntry(value: '2', label: 'No. 2'),
+                DropdownMenuEntry(value: '3', label: 'No. 3'),
+                DropdownMenuEntry(value: '4', label: 'No. 4'),
               ],
               onSelected: (String? value) {
                 if (value != null) {
@@ -254,14 +272,12 @@ class BackgroundPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final path = Path();
 
-    double scale = 216;
-
     // Draw different shapes based on the selected option
-    if (functionName == 'No. 1') {
+    if (functionName == '1') {
       double k = (progress - 0.5).abs() * 20;
 
       for (double theta = 0; theta <= 12 * math.pi; theta += 0.001) {
-        double r = scale / math.sqrt(1 + math.pow(math.cos(k * theta), 2));
+        double r = 216 / math.sqrt(1 + math.pow(math.cos(k * theta), 2));
 
         double x = center.dx + r * math.cos(theta);
         double y = center.dy + r * math.sin(theta);
@@ -272,17 +288,49 @@ class BackgroundPainter extends CustomPainter {
           path.lineTo(x, y);
         }
       }
-    } else if (functionName == 'No. 2') {
+    } else if (functionName == '2') {
       double n =
           3 + math.sin(progress * 2 * math.pi) * 5; // varies from -2 to 8
 
       for (double theta = math.pi; theta <= 12 * math.pi; theta += 0.01) {
-        double r = scale * math.cos(n * theta);
+        double r = 216 * math.cos(n * theta);
 
         double x = center.dx + r * math.cos(theta);
         double y = center.dy + r * math.sin(theta);
 
         if (theta == math.pi) {
+          path.moveTo(x, y);
+        } else {
+          path.lineTo(x, y);
+        }
+      }
+    } else if (functionName == '3') {
+      paint.color = Colors.red;
+      double a = (progress - 0.5).abs() * 20;
+
+      for (double theta = 0; theta <= math.pi * a / 2; theta += 0.001) {
+        double r = 30 * theta * math.cos(a * theta);
+
+        double x = center.dx + r * math.cos(theta);
+        double y = center.dy + r * math.sin(theta);
+
+        if (theta == 0) {
+          path.moveTo(x, y);
+        } else {
+          path.lineTo(x, y);
+        }
+      }
+    } else if (functionName == '4') {
+      paint.color = Colors.green;
+      double a = (progress - 0.5).abs() * 10;
+
+      for (double theta = 0; theta <= 24 * math.pi * a; theta += 0.01) {
+        double r = 200 * math.cos(theta / a);
+
+        double x = center.dx + r * math.cos(theta);
+        double y = center.dy + r * math.sin(theta);
+
+        if (theta == 0) {
           path.moveTo(x, y);
         } else {
           path.lineTo(x, y);
